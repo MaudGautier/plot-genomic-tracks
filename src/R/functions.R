@@ -1,14 +1,14 @@
 #!/usr/bin/env R
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-#																			   #
-# functions.R																   #
-#																			   #
-# By: Maud Gautier <https://github.com/MaudGautier>, 2021					   #
-#																			   #
+#                                                                              #
+# functions.R                                                                  #
+#                                                                              #
+# By: Maud Gautier <https://github.com/MaudGautier>, 2021                      #
+#                                                                              #
 # Broad permissions are granted to use, modify, and distribute this software   #
 # as specified in the MIT License included in this distribution's LICENSE file.#
-#																			   #
+#                                                                              #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 # This script contains the functions required to plot genomic tracks
