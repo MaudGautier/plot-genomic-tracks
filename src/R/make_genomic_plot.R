@@ -76,8 +76,8 @@ tracks_info <- list(
                       type = "transcripts"),
   "Pile-up" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/EW_MERGED.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
                  group = "pileup", 
-                 sashimi_plus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_MATE1_SENSE/", 
-                 sashimi_minus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_MATE2_SENSE/", 
+                 sashimi_plus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_PLUS/", 
+                 sashimi_minus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_MINUS/", 
                  color = "grey", 
                  height = 0.6, 
                  type = "sashimi", 
@@ -187,48 +187,48 @@ for (selected_gene in list_genes_neos_newIDs) {
     
     # Find maximal height for the group 
     max_height_group <- get_max_height(list_tables[tracks_info[[name]]$list_heights_group], 
-                                       selected_gene, 50)
+                                       gene, 50)
     
     # Add plot to list
     if (track$type == "transcripts") {
       list_plots[[name]] <- plot_transcripts(list_txdb[[name]], genom_range, "arrowrect")
     } else if (track$type == "density") {
-      list_plots[[name]] <- plot_coverage(list_tables[[name]], selected_gene, max_height_group, track$color)
+      list_plots[[name]] <- plot_coverage(list_tables[[name]], gene, max_height_group, track$color)
     } else if (track$type == "GGAA") {
-      list_plots[[name]] <- plot_GGAA_repeats(list_tables[[name]], genom_range, selected_gene, track$color)
+      list_plots[[name]] <- plot_GGAA_repeats(list_tables[[name]], genom_range, gene, track$color)
     } else if (track$type == "sashimi") {
-      density_list = list()
-      junction_list = list()
-      tab_dt <- as.data.table(list_tables[[name]][,c("Position", "Coverage")])
-      colnames(tab_dt) = c("x", "y")
-      density_list[[name]] = tab_dt
-  
-      # Source junctions file
+      
+      # Select the file containing the junctions
       if (gtf_lines$V7[1] == "-") { 
-        source(paste0(track$sashimi_minus, '/', selected_gene, '_pileup.R')) 
+        file_junctions <- paste0(track$sashimi_minus, '/', gene, '.R')
       } else if (gtf_lines$V7[1] == "+") { 
-        source(paste0(track$sashimi_plus, '/', selected_gene, '_pileup.R')) 
+        file_junctions <- paste0(track$sashimi_plus, '/', gene, '.R')
       }
       
-      # Limits
-      if (selected_gene %in% names(track$adapted_min_junctions)) { 
-        min_sashimi <- track$adapted_min_junctions[[selected_gene]]
+      # Select minimum number of junctions
+      if (gene %in% names(track$adapted_min_junctions)) { 
+        min_sashimi <- track$adapted_min_junctions[[gene]]
       } else { min_sashimi <- track$default_min_junctions }
       
-      junction_list_subset = list()
-      junction_list_subset[[name]] <- junction_list[[name]][which(junction_list[[name]]$count > min_sashimi),]
-      list_plots[[name]] <- plot_sashimi(list_tables[[name]], junction_list_subset, selected_gene, density_list)
+      # Plot sashimi
+      color_junction_arcs <- list()
+      color_junction_arcs[[name]] <- "darkgrey"
+      list_plots[[name]] <- plot_sashimi(list_tables[[name]], gene, 
+                                         file_junctions, min_sashimi, 
+                                         density_color = "black", 
+                                         color_list = color_junction_arcs)
+      
     } 
   }
   
   # Combine plots
-  chromosome <- selected_gtf_lines$V1[1]
-  png(paste0(output_folder_neos, selected_gene, ".png"), 
+  chromosome <- gtf_lines$V1[1]
+  png(paste0(output_folder, gene, ".png"), 
       width = 1800, height = 1050)
   print(ggbio::tracks(list_plots,
                       heights = heights,
                       label.text.cex = 1.5,
-                      title = paste0(selected_gene, " (", chromosome, ")"),
+                      title = paste0(gene, " (", chromosome, ")"),
                       xlim = c(min(genom_range@ranges@start), max(genom_range@ranges@start + genom_range@ranges@width))
   ) + ylab("") + scale_x_continuous(labels=comma) + theme(axis.text.x = element_text(size = 15))) 
    dev.off()

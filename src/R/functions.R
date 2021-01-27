@@ -167,10 +167,11 @@ scale_lwd <- function(r) {
 # Plots sashimi track for one gene ----------------------------------------
 # NB: Modified from the original https://github.com/guigolab/ggsashimi
 plot_sashimi <- function(table_cov, 
-                         junction_list, 
                          selected_gene, 
-                         density_list, 
-                         density_color = "black") {
+                         file_junctions,
+                         min_sashimi,
+                         density_color = "black", 
+                         color_list = list("Pile-up"="darkgrey")) {
   
   # Fix problems with ggplot2 vs >3.0.0
   if(packageVersion('ggplot2') >= '3.0.0'){
@@ -179,9 +180,26 @@ plot_sashimi <- function(table_cov,
     vs = 0
   }
   
+  # Check that file_junctions exists
+  if (!file.exists(file_junctions)) {
+    stop(paste("Junction file", file_junctions, "not found. Please provide the correct path."))
+    quit(save="ask")
+  }
+  
+  tab_dt <- as.data.table(table_cov[,c("Position", "Coverage")])
+  colnames(tab_dt) = c("x", "y")
+  
+  density_list = list()
+  density_list[[name]] = tab_dt
+  
+  all_junction_list = list()
+  all_junction_list[[name]] <- source(file_junctions)$value
+  
+  junction_list = list()
+  junction_list[[name]] <- all_junction_list[[name]][which(all_junction_list[[name]]$count > min_sashimi),]
+  
+  
   # Initialise lists
-  labels = list("Pile-up"="Pile-up")
-  color_list = list("Pile-up"="darkgrey")
   density_grobs = list()
   sub_table_cov <- table_cov[which(table_cov$Gene_ID == selected_gene), ]
   plot_cov <- ggplot(sub_table_cov, aes(x = Position, y = Coverage))
