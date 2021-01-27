@@ -89,10 +89,18 @@ plot_transcripts <- function(txdb,
   # In case of error (i.e. when no transcript in the genomic region),
   # plot a blank graphic
   if (class(trans_plot) == "try-error") {
-    trans_plot <- ggplot(data.frame()) + theme_classic()
+    left <- min(genom_range@ranges@start)
+    right <- max(genom_range@ranges@start + genom_range@ranges@width)
+    
+    trans_plot <- ggplot(data.frame(Position = seq(left, right), 
+                                    Coverage = rep(0, right-left+1)), 
+                         aes(x = Position, y = Coverage)) +
+      theme_classic() + 
+      theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
+            axis.ticks.x = element_blank(), axis.text.x = element_blank())
   }
-
-	return (trans_plot)
+  
+  return (trans_plot)
 }
 
 
@@ -310,8 +318,9 @@ plot_GGAA_repeats <- function(tb,
 									   selected_gene, NA, color, "line") 
 		}
 	} else {
-		# Blank plot if fewer than 4 consecutive repeats
-		plot_GGAA <- ggplot(data.frame()) + ylim(c(0,20)) + theme_classic()
+	  # Blank plot if fewer than 4 consecutive repeats
+	  plot_GGAA <- plot_coverage(tb, 
+	                             selected_gene, NA, "white", "bar") 
 	}
 
 	# Return GGAA plot
