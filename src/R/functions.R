@@ -76,16 +76,23 @@ plot_coverage <- function(table_cov,
 
 # Plots all transcripts of one selected gene ------------------------------
 plot_transcripts <- function(txdb, 
-							 genom_range) {
+							 genom_range, 
+							 geom_type = "rect") {
 
 	# Plot transcripts
-	plot_transcripts <- ggbio::autoplot(txdb, 
-										which=genom_range, 
-										names.expr = "gene_id", 
-										range.geom = "arrowrect") + 
-						theme_classic() 
+  trans_plot <- try(ggbio::autoplot(txdb, 
+                                          which=genom_range, 
+                                          names.expr = "gene_id", 
+                                          range.geom = geom_type) + 
+                            theme_classic())
+  
+  # In case of error (i.e. when no transcript in the genomic region),
+  # plot a blank graphic
+  if (class(trans_plot) == "try-error") {
+    trans_plot <- ggplot(data.frame()) + theme_classic()
+  }
 
-	return (plot_transcripts)
+	return (trans_plot)
 }
 
 
@@ -279,6 +286,43 @@ plot_sashimi <- function(table_cov,
 
 }
 
+
+# Create GGAA-repeats plot ------------------------------------------------
+plot_GGAA_repeats <- function(tb, 
+							  genom_range, 
+							  selected_gene, 
+							  color = "black") {
+
+	# Plot only if >= 4 consecutive GGAA repeats
+	if (max(tb[which(tb$Coverage >= 4 & 
+					 tb$Gene_ID == selected_gene),]$Coverage) != -Inf) {
+
+		# Fix: avoid invisible bars when the plotting window is very wide
+		left <- min(genom_range@ranges@start)
+		right <- max(genom_range@ranges@start + genom_range@ranges@width)
+		if (right - left < 3*extension) {
+			plot_GGAA <- plot_coverage(tb[which(tb$Coverage >= 4 | 
+												tb$Coverage == 0),], 
+									   selected_gene, NA, color, "bar")
+		} else {
+			plot_GGAA <- plot_coverage(tb[which(tb$Coverage >= 4 | 
+												tb$Coverage == 0),], 
+									   selected_gene, NA, color, "line") 
+		}
+	} else {
+		# Blank plot if fewer than 4 consecutive repeats
+		plot_GGAA <- ggplot(data.frame()) + ylim(c(0,20)) + theme_classic()
+	}
+
+	# Return GGAA plot
+	return(plot_GGAA)
+}
+
+
+# Read track table --------------------------------------------------------
+read_track_table <- function(track_file) {
+	tab_track <- read.table(track_file, header=T, comment = "")
+}
 
 
 # -------------------------------------------------------------------------
