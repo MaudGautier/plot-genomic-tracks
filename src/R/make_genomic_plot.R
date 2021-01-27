@@ -33,7 +33,7 @@ config_file <- args[1]
 if (!exists(deparse(substitute(main_folder)))) {
   main_folder <- getwd()
 }
-source(paste0(main_folder, "/src/R/functions.R"))
+source(file.path(main_folder, "/src/R/functions.R"))
 source(config_file)
 
 # Import libraries
@@ -46,6 +46,11 @@ for (track_id in 1:length(tracks_info)) {
                ": File", tracks_info[[track_id]]$path, "not found"))
     quit(save="ask")
   }
+}
+
+# Check that output folder exists
+if (!dir.exists(output_folder)) {
+  dir.create(output_folder, showWarnings = F)
 }
 
 # Initialise lists and read tracks
@@ -139,9 +144,9 @@ for (gene in genes) {
       
       # Select the file containing the junctions
       if (gtf_lines$V7[1] == "-") { 
-        file_junctions <- paste0(track$sashimi_minus, '/', gene, '.R')
+        file_junctions <- file.path(track$sashimi_minus, paste0(gene, '.R'))
       } else if (gtf_lines$V7[1] == "+") { 
-        file_junctions <- paste0(track$sashimi_plus, '/', gene, '.R')
+        file_junctions <- file.path(track$sashimi_plus, paste0(gene, '.R'))
       }
       
       # Select minimum number of junctions
@@ -164,7 +169,7 @@ for (gene in genes) {
   chromosome <- gtf_lines$V1[1]
   left <- min(genom_range@ranges@start)
   right <- max(genom_range@ranges@start + genom_range@ranges@width)
-  png(paste0(output_folder, gene, ".png"), 
+  png(file.path(output_folder, paste0(gene, ".png")), 
       width = 1800, height = 1050)
   print(ggbio::tracks(list_plots,
                       heights = heights,
