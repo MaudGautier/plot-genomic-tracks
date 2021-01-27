@@ -214,15 +214,15 @@ for (selected_gene in list_genes_neos_newIDs) {
   
   # Combine plots
   chromosome <- selected_gtf_lines$V1[1]
-  #png(paste0(output_folder_neos, selected_gene, ".png"), 
-  #    width = 1800, height = 1050)
+  png(paste0(output_folder_neos, selected_gene, ".png"), 
+      width = 1800, height = 1050)
   print(ggbio::tracks(list_plots,
                       heights = heights,
                       label.text.cex = 1.5,
                       title = paste0(selected_gene, " (", chromosome, ")"),
                       xlim = c(min(genom_range@ranges@start), max(genom_range@ranges@start + genom_range@ranges@width))
   ) + ylab("") + scale_x_continuous(labels=comma) + theme(axis.text.x = element_text(size = 15))) 
-  # dev.off()
+   dev.off()
 
 }
 
