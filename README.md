@@ -106,6 +106,19 @@ The configuration file ([see an example here](https://github.com/MaudGautier/plo
 3. The path to the output folder containing the plots
 
 
+#### List of tracks
+
+Each track must be given a number of characteristics associated to it.
+These include:
+
+* (Required) `path`: the path to the file
+* `group`: a string or numeric indicating the group to which the track belongs. This piece of information is used to find the scale on which certain tracks must be based (case where multiple tracks must be shown on the same scale to be compared to one another)
+* `color`: the color of the track
+* `height`: the relative height of the track when combined with all of the tracks
+* (Required) `type`: the category of the track. This defines the actions that will be taken on that track to plot it.
+
+
+#### List of genomic regions
 
 
 
