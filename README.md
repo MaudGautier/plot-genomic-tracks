@@ -115,7 +115,19 @@ These include:
 * `group`: a string or numeric indicating the group to which the track belongs. This piece of information is used to find the scale on which certain tracks must be based (case where multiple tracks must be shown on the same scale to be compared to one another)
 * `color`: the color of the track
 * `height`: the relative height of the track when combined with all of the tracks
-* (Required) `type`: the category of the track. This defines the actions that will be taken on that track to plot it.
+* (Required) `type`: the category of the track. This defines the actions that will be taken on that track to plot it. The categories can be: 
+	* `'density'` to plot only the per-base coverage of each file
+	* `'sashimi'` to add the junctions
+	* `'transcripts'` to draw the transcripts
+
+
+*Additional variables for `sashimi` types:*
+
+* `sashimi_plus`: path to the R script file containing the junction reads located on the forward strand
+* `sashimi_minus`: path to the R script file containing the junction reads located on the reverse strand
+* `default_min_junctions`: the minimum number of junction reads required to draw the junction
+* `adapted_min_junctions`: a list of minimum number of junctions for certain specific genes (only necessary when different from the `default_min_junctions` value)
+
 
 
 #### List of genomic regions
