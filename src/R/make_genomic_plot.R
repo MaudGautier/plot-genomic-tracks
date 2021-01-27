@@ -80,7 +80,15 @@ tracks_info <- list(
                  sashimi_minus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_MATE2_SENSE/", 
                  color = "grey", 
                  height = 0.6, 
-                 type = "sashimi")
+                 type = "sashimi", 
+                 default_min_junctions = 200,
+                 adapted_min_junctions = list(
+                   "Ew_NG6" = 100,
+                   "Ew_NG8" = 500,
+                   "Ew_NG11" = 400,
+                   "Ew_NG20" = 3000
+                 )
+  )
 )
 output_folder_neos <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/plots/"
 main_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/"
@@ -195,16 +203,17 @@ for (selected_gene in list_genes_neos_newIDs) {
       colnames(tab_dt) = c("x", "y")
       density_list[[name]] = tab_dt
   
-      # source junctions file
-      if (selected_gtf_lines$V7[1] == "-") { source(paste0(track$sashimi_minus, '/', selected_gene, '_pileup.R')) }
-      else { source(paste0(track$sashimi_plus, '/', selected_gene, '_pileup.R')) }
+      # Source junctions file
+      if (gtf_lines$V7[1] == "-") { 
+        source(paste0(track$sashimi_minus, '/', selected_gene, '_pileup.R')) 
+      } else if (gtf_lines$V7[1] == "+") { 
+        source(paste0(track$sashimi_plus, '/', selected_gene, '_pileup.R')) 
+      }
       
       # Limits
-      min_sashimi <- 200
-      if (selected_gene == "Ew_NG6") { min_sashimi <- 100 }
-      if (selected_gene == "Ew_NG8") { min_sashimi <- 500 }
-      if (selected_gene == "Ew_NG11") { min_sashimi <- 400 }
-      if (selected_gene == "Ew_NG20") { min_sashimi <- 3000 }
+      if (selected_gene %in% names(track$adapted_min_junctions)) { 
+        min_sashimi <- track$adapted_min_junctions[[selected_gene]]
+      } else { min_sashimi <- track$default_min_junctions }
       
       junction_list_subset = list()
       junction_list_subset[[name]] <- junction_list[[name]][which(junction_list[[name]]$count > min_sashimi),]
