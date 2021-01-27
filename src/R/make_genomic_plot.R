@@ -2,7 +2,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 #                                                                              #
-# make_genomic_plot.R                                                                  #
+# make_genomic_plot.R                                                          #
 #                                                                              #
 # By: Maud Gautier <https://github.com/MaudGautier>, 2021                      #
 #                                                                              #
