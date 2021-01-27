@@ -318,7 +318,8 @@ plot_sashimi <- function(table_cov,
 # Create GGAA-repeats plot ------------------------------------------------
 plot_GGAA_repeats <- function(tb, 
                               genom_range, 
-                              selected_gene, 
+                              selected_gene,
+                              half_width,
                               color = "black") {
   
   # Plot only if >= 4 consecutive GGAA repeats
@@ -328,7 +329,7 @@ plot_GGAA_repeats <- function(tb,
     # Fix: avoid invisible bars when the plotting window is very wide
     left <- min(genom_range@ranges@start)
     right <- max(genom_range@ranges@start + genom_range@ranges@width)
-    if (right - left < 3*extension) {
+    if (right - left < 3*half_width) {
       plot_GGAA <- plot_coverage(tb[which(tb$Coverage >= 4 | 
                                             tb$Coverage == 0),], 
                                  selected_gene, NA, color, "bar")
