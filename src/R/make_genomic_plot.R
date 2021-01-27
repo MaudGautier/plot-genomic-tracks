@@ -15,99 +15,13 @@
 # input in a config file.
 
 
-####### ANNOTATIONS POUR MOI #######
 
-# Pour lancer depuis CLI
-#Rscript /Users/maudgautier/Documents/github-savings/plot-genomic-tracks/src/R/make_genomic_plot.R
+# Parse arguments ---------------------------------------------------------
 
 
+args <- commandArgs(trailingOnly = TRUE)
+config_file <- args[1]
 
-# CONFIG ------------------------------------------------------------------
-## Config neotranscripts
-
-## 1. Config : path des fichiers + noms associés + couleurs associées
-
-# Name # File # Sashimi # height
-
-## CONFIG
-tracks_info <- list(
-  "GGAA" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/hg19_GGAA_TTCC_20151221.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
-                group = "GGAA", 
-                color = "black", 
-                height = 0.2, 
-                type = "GGAA"),
-  "EF_low" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/ASP14-d7-FLI1.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
-                   group = "FLI1", 
-                   color = "red", 
-                   height = 0.3, 
-                   type = "density"),
-  "EF_high" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/FLI1_merged.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
-                   group = "FLI1",
-                   color = "red", 
-                   height = 0.3, 
-                   type = "density"),
-  "H3K27ac" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/H3K27ac_merged.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
-                   group = "H3K27", 
-                   color = "green", 
-                   height = 0.3, 
-                   type = "density"),
-  "H3K4me3" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/H3K4me3_merged.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
-                   group = "H3K4", 
-                   color = "blue", 
-                   height = 0.3, 
-                   type = "density"),
-  "Tumor" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/G402T05.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
-                   group = "tumor", 
-                   color = "grey", 
-                   height = 0.3, 
-                   type = "density"),
-  # "Cell line" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/B69T10.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
-  #                group = "cl", 
-  #                color = "grey", 
-  #                height = 0.3, 
-  #                type = "density"),
-    "Prediction" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/1_Data/201201_Ewing_neos_NEW_IDs.gtf", 
-                      group = "neotranscripts", 
-                      height = 0.4, 
-                      type = "transcripts"),
-  "All genes" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS/gencode.v19.annotation.sorted.gtf_MODIF", 
-                      group = "neotranscripts", 
-                      height = 0.4, 
-                      type = "transcripts"),
-  "Pile-up" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/EW_MERGED.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
-                 group = "pileup", 
-                 sashimi_plus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_PLUS/", 
-                 sashimi_minus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_MINUS/", 
-                 color = "grey", 
-                 height = 0.6, 
-                 type = "sashimi", 
-                 default_min_junctions = 200,
-                 adapted_min_junctions = list(
-                   "Ew_NG6" = 100,
-                   "Ew_NG8" = 500,
-                   "Ew_NG11" = 400,
-                   "Ew_NG20" = 3000
-                 )
-  )
-)
-output_folder_neos <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/plots/"
-main_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/"
-list_genes_neos_newIDs <- c("Ew_NG3")
-list_longers <- c()
-# idem : indiquer la taille de fenetre dans une liste des noms des genes
-### Un autre config pour 13, 16 et 20 avec non pas tumor mais cell-line
-
-
-
-## Mix
-# gtf_file_neos <- '/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/1_Data/201201_Ewing_neos_NEW_IDs.gtf'
-# tab_gtf_neos <- read.table(gtf_file_neos, sep="\t")
-# txdb_neos <- GenomicFeatures::makeTxDbFromGFF(file = gtf_file_neos, format="gtf")
-
-
-
-
-## IN SCRIPT make_genomic_plot.R
 
 
 
