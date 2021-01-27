@@ -31,6 +31,8 @@ import_libraries <- function() {
   suppressPackageStartupMessages(library(gridExtra))
   suppressPackageStartupMessages(library(data.table))
   suppressPackageStartupMessages(library(gtable))
+  suppressPackageStartupMessages(library(IRanges))
+  suppressPackageStartupMessages(library(GenomicRanges))
 }
 
 

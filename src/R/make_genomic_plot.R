@@ -148,10 +148,15 @@ for (track_id in 1:length(tracks_info)) {
   } 
 }
 
-# Print warning if not same size
+# Verify that the dimensions of all tables are the same
 if (!check_dim_equality(list_tables[which(names(list_tables) == "GGAA")])) {
   print("WARNING: Dimensions of all files are not equal. Make sure the input files re correctly created before carrying on!")
 }
+
+# Read gtf genes
+gtf_genes <- read.table(gtf_genes_path, sep="\t")
+txdb_genes <- GenomicFeatures::makeTxDbFromGFF(file = gtf_genes, format="gtf")
+
 
 
 
@@ -159,22 +164,21 @@ if (!check_dim_equality(list_tables[which(names(list_tables) == "GGAA")])) {
 
 # Create plots ------------------------------------------------------------
 
-for (selected_gene in list_genes_neos_newIDs) {
-  cat(paste0("\nCreating plot for ", selected_gene, "...\n"))
+for (gene in list_genes_neos_newIDs) {
+  cat(paste0("\nCreating plot for ", gene, "...\n"))
   
-  
-  # REFAIRE CA SANS TAB_GTF_NEOS + avoir longueur des genes dans la liste des genes + min_sashimi dans liste des genes
   # Get genomic range
-  selected_gtf_lines <- tab_gtf_neos[which(tab_gtf_neos$V3 == "transcript" & grepl(paste0(selected_gene,";"), tab_gtf_neos$V9)),]
+  gtf_lines <- gtf_genes[which(gtf_genes$V3 == "transcript" & 
+                                 grepl(paste0(gene,";"), gtf_genes$V9)),]
+  
   # Increase extension for certain genes
-  if (selected_gene %in% list_longers) {
+  if (gene %in% list_longers) {
     extension <- 50000
   } else {
     extension <- 10000
   }
-  genom_range <- GenomicRanges::GRanges(selected_gtf_lines$V1, 
-                                        IRanges::IRanges(selected_gtf_lines$V4 - extension, 
-                                                         selected_gtf_lines$V5 + extension))
+  genom_range <- GRanges(gtf_lines$V1, IRanges(gtf_lines$V4 - extension,
+                                               gtf_lines$V5 + extension))
   
   
   
