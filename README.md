@@ -132,7 +132,11 @@ These include:
 
 #### List of genomic regions
 
+Each genomic region to be plotted must be listed in the `genes` variable by its ID.
+In addition, a few pieces of information should be indicated:
 
+* `default_half_width`: The width that must be spanned on the 5' and 3' sides of the transcripts
+* `half_widths`: A list of adapted widths for certain specific genes (only necessary when different from the `default_half_width` value)
 
 
 
