@@ -14,8 +14,9 @@
 # Creates per-base coverage file (`-o`) on regions defined by input BED file 
 # (`--bed|-b`) from input file that can be in either a BED or a BAM format
 # (`-i`). The process is sped up if a chrom_sizes file is provided (`--gs|-g`).
-# If the input file is in a BIGWIG format instead of BED or BAM, the option 
-# `--bw|--bigwig` should be turned on. 
+# If the input file is in a BIGWIG format instead of BED or BAM and is to be
+# processed as a GGAA track (i.e. make repeats visible), the option 
+# `--rep|--repeat` should be turned on. 
 
 
 ## Usage
@@ -58,7 +59,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 # Default:
-bigwig="false"
+repeat="false"
 
 while [[ $# -gt 1 ]]
 do
@@ -81,8 +82,8 @@ do
 			genome_sizes="$2"
 			shift
 			;;
-		-bw|--bigwig)
-			bigwig="true"
+		--rep|--repeat)
+			repeat="true"
 			;;
 		*)
 			# unknown option
@@ -95,7 +96,7 @@ echo GENOME SIZES    = "${genome_sizes}"
 echo INPUT - BAM/BED = "${input_file}"
 echo OUTPUT PREFIX   = "${output_prefix}"
 echo BED REGIONS     = "${bed_regions}"
-echo INPUT IS BIGWIG = "${bigwig}"
+echo INPUT IS REPEAT = "${repeat}"
 
 
 
@@ -104,7 +105,7 @@ echo INPUT IS BIGWIG = "${bigwig}"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 # (Optional) If the input file is a bigwig file, tranform it to BED format
-if [ $bigwig = "true" ] ; then
+if [ $repeat = "true" ] ; then
 	# Transform to bedgraph
 	bigWigToBedGraph ${input_file} ${input_file}.bedgraph
 
@@ -148,7 +149,7 @@ awk -v OFS="\t" '{
 
 
 # (Optional) Get height proportional to number of repeats
-if [ $bigwig = "true" ] ; then
+if [ $repeat = "true" ] ; then
 
 	mv ${output_prefix}.cov_per_base_final \
 		${output_prefix}.cov_per_base_no_height
@@ -188,7 +189,7 @@ fi
 
 ## Delete intermediary file
 rm -f ${output_prefix}.cov_per_base
-if [ bigwig = "true" ] ; then
+if [ $repeat = "true" ] ; then
 	rm -f ${temp_file}
 	rm -f ${output_prefix}.cov_per_base_no_height
 fi

@@ -23,9 +23,23 @@
 output_folder=/data/kdi_prod/project_result/726/27.01/results/tests/
 if [ ! -d $output_folder ] ; then mkdir $output_folder ; fi
 input_folder=/data/kdi_prod/project_result/726/27.01/results/1_Data/
-gtf_name=201201_Ewing_neos_NEW_IDs
 chrom_sizes_hg19="/data/annotations/pipelines/Human/hg19/genome/chrom_hg19.sizes"
 chrom_sizes_sorted=${input_folder}/chrom_hg19.sizes.sorted # Prepared below
+hg19_gencode=/data/annotations/pipelines/Human/hg19/gtf/gencode.v19.annotation.sorted.gtf
+hg19_gencode_final=${output_folder}/gencode.v19.annotation.gtf
+
+# Parameters for bed regions
+gtf_name=201201_Ewing_neos_NEW_IDs
+gtf_regions=${input_folder}/${gtf_name}.gtf
+bed_regions=${output_folder}/genomic_regions.bed
+extension=50000
+
+# Parameters for sashimi
+folder_junctions_plus=$output_folder/junctions_plus/
+folder_junctions_minus=$output_folder/junctions_minus/
+if [ ! -d $folder_junctions_plus ] ; then mkdir $folder_junctions_plus ; fi
+if [ ! -d $folder_junctions_minus ] ; then mkdir $folder_junctions_minus ; fi
+min_junctions=1
 
 # List of tracks to prepare for plotting -- density plots
 list_files_merged=(
@@ -47,6 +61,11 @@ list_files_tum_CL=(
 	G312T05
 )
 
+# List of tracks to prepare for plotting -- GGAA plots
+list_repeats=(hg19_GGAA_TTCC_20151221)
+
+# List of tracks to prepare for plotting -- sashimi plots
+list_sashimis=(EW_merged)
 
 
 
@@ -57,69 +76,87 @@ list_files_tum_CL=(
 
 # (Optional) Sort chrom sizes in correct order
 if [ ! -f $chrom_sizes_sorted ] ; then
-	grep "chr[123456789]" ${chrom_sizes_hg19} | grep -v random | grep -v hap > ${chrom_sizes_sorted}
+	grep "chr[123456789]" ${chrom_sizes_hg19} | grep -v random | grep -v hap \
+		> ${chrom_sizes_sorted}
 	grep "chrM" ${chrom_sizes_hg19} >> ${chrom_sizes_sorted}
 	grep "chr[XY]" ${chrom_sizes_hg19} >> ${chrom_sizes_sorted}
 fi
 
 
 # Step 1: Prepare BED file of regions to cover for each neotranscript
-sh ./src/sh/gtf_to_bed.sh \
-	-i ${input_folder}/${gtf_name}.gtf \
-	-o ${output_folder}/genomic_regions.bed \
-	-e 50000 \
-	-u "gene"
+if [ ! -f ${bed_regions} ] ; then
+	echo "Creating ${bed_regions}..."
+	sh ./src/sh/gtf_to_bed.sh \
+		-i ${gtf_regions} \
+		-o ${bed_regions} \
+		-e ${extension} \
+		-u "gene"
+fi
 
 
 # Step 2: Prepare per-base coverage files
 ##  2a -- Density tracks
 for name in ${list_files_merged[@]} ${list_files_d0_d7[@]} ${list_files_tum_CL[@]} ; do
-	echo "Processing ${name}..."
+	echo "Processing ${name} track..."
 	sh ./src/sh/create_per_base_coverage_table.sh \
 		-i ${input_folder}/${name}.bam \
-		--bed ${output_folder}/genomic_regions.bed \
-		--gs ${input_folder}/chrom_sizes_in_sorted_order.sizes \
+		--bed ${bed_regions} \
+		--gs ${chrom_sizes_sorted} \
 		-o ${output_folder}/${name}.against.${gtf_name}
 done
 
 ##  2b -- GGAA track (from BIGWIG file)  -  *requires `--bigwig` option*
-sh ./src/sh/create_per_base_coverage_table.sh \
-	--bigwig \
-	-i ${input_folder}/hg19_GGAA_TTCC_20151221.bw \
-	--bed ${output_folder}/genomic_regions.bed \
-	--gs ${input_folder}/chrom_sizes_in_sorted_order.sizes \
-	-o ${output_folder}/hg19_GGAA_TTCC_20151221.against.${gtf_name}
+for name in ${list_repeats[@]} ; do
+	sh ./src/sh/create_per_base_coverage_table.sh \
+		--repeat \
+		-i ${input_folder}/${name}.bw \
+		--bed ${bed_regions} \
+		--gs ${chrom_sizes_sorted} \
+		-o ${output_folder}/${name}.against.${gtf_name}
+done
 
 
 # Step 3: Prepare Rscript junction files for sashimi tracks
-tsv_list_of_bams_MERGED=$SASHIMI/list_bams_MERGED.tsv
-/data/kdi_prod/project_result/726/27.01/results/4_Sashimi/list_bams_MERGED.tsv
-# echo -e "Pile-up\t$DATA/EW_merged.bam" > $tsv_list_of_bams_MERGED
-while read chrom start stop ID ; do
-	echo $ID
+for name in ${list_sashimis[@]} ; do
+	while read chrom start stop ID ; do
+		echo $ID
 
-	# Get position
-	position=$chrom":"$start"-"$stop
-	
-	# Get junctions on + strand
-	python3 src/sh/get_junctions_Rscript.py \
-		-b ${input_folder}/EW_merged.bam \
-		-c $position \
-		-s MATE1_SENSE \
-		-M 1 \
-		-r $output_folder/junctions_plus/${ID}.R
+		# Get position
+		position=$chrom":"$start"-"$stop
+		
+		# Get junctions on + strand
+		python3 ./src/sh/get_junctions_Rscript.py \
+			-b ${input_folder}/${name}.bam \
+			-c $position \
+			-s MATE1_SENSE \
+			-M ${min_junctions} \
+			-r ${folder_junctions_plus}/${ID}.R
 
-	# Get junctions on - strand
-	python3 src/sh/get_junctions_Rscript.py \
-		-b ${input_folder}/EW_merged.bam \
-		-c $position \
-		-s MATE2_SENSE \
-		-M 1 \
-		-r $output_folder/junctions_minus/${ID}.R
+		# Get junctions on - strand
+		python3 ./src/sh/get_junctions_Rscript.py \
+			-b ${input_folder}/${name}.bam \
+			-c $position \
+			-s MATE2_SENSE \
+			-M ${min_junctions} \
+			-r ${folder_junctions_minus}/${ID}.R
 
-done < ${output_folder}/genomic_regions.bed
-
+	done < ${bed_regions}
+done
 
 
-# Optional: Modify names in gene_id of GTF tracks
+# (Optional): Modify names in gene_id of GTF tracks for hg19 transcripts
+if [ ! -f ${hg19_gencode_final} ] ; then
+	grep "^##" ${hg19_gencode} > ${hg19_gencode_final}
+	grep -v "^##" ${hg19_gencode} | awk -v FS="\t" -v OFS="\t" '
+	{
+		split($9,a,";")
+		split(a[5],b," ")
+		split(a[1], c, " ") 
+		printf $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\t"$8"\tgene_id "b[2] 
+		for (i=2; i<=length(a); i++) {
+			printf ";"a[i]
+		}
+		printf("\n") 
+	}' >> ${hg19_gencode_final}
+fi
 
