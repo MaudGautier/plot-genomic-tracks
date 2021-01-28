@@ -80,7 +80,7 @@ tracks_info <- list(
 
 
 ## Genomic regions
-genes <- sprintf("Ew_NG%s",c(1:37))
+genes <- sprintf("DSRCT_NG%s",c(1:37))
 default_half_width <- 10000
 half_widths <- list("DSRCT_NG2" = 50000,
 					"DSRCT_NG4" = 50000,
