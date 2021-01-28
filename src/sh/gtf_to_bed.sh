@@ -86,10 +86,9 @@ echo EXTENSION       = "${extension}"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 # If no extension => it is 0
-if [ -v $extension  ] ; then
+if [ -v $extension ] ; then
 	extension=0
 fi
-
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -120,7 +119,7 @@ elif [ $unit = "gene" ] ; then
 		| sort -k1,1 -k2,2n | uniq \
 		| sort -k4,4 - \
 		| groupBy -g 1,4 -c 2,3,5 -o min,max,first \
-		| awk -v OFS="\t" '{print $1, $3-EXT, $4+EXT, $2}' \
+		| awk -v OFS="\t" -v EXT=$extension '{print $1, $3-EXT, $4+EXT, $2}' \
 		| sort -k1,1V -k2,2n \
 		> ${output_bed}
 
