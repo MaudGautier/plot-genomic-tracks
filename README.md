@@ -3,19 +3,27 @@
 This repo contains scripts that will allow you to automatically create plots of genomic tracks at defined genomic regions in an IGV-like fashion.
 
 
-## Description
-
 
 ## Usage
 
 
-First, clone the repository
+*Preliminary step: clone the code*
+Clone the repository with this command line:
 ```
 git clone https://github.com/MaudGautier/plot-genomic-tracks.git ./
 cd ./plot-genomic-tracks
 ```
 
-Second, prepare a configuration file in a similar fashion to that located in the [``example/`` directory](https://github.com/MaudGautier/plot-genomic-tracks/tree/main/example/EwS).
+*Step 1: Parse input files*
+Parse the input files by preparing a configuration file in a similar fashion to the [``example/config_prep.sh`` file](https://github.com/MaudGautier/plot-genomic-tracks/tree/main/example/config_prep.sh) and executing it using this command line:
+```
+sh your_config_prep_file.sh
+```
+
+
+
+*Step 2: Plot tracks*
+Prepare a configuration file in a similar fashion to the [``example/config_plot.R`` file](https://github.com/MaudGautier/plot-genomic-tracks/tree/main/example/config_plot.R).
 
 Once this is done, you can plot your tracks using the following command line:
 ```
@@ -172,4 +180,4 @@ In addition, a few pieces of information should be indicated:
 [] Allow to give BED file rather than GTF file to define regions (step 2 -- R plotting)
 [] Add a test folder with infos from 1 small gene
 [] Add an option for BIGWIG files
-
+[] Add possibility to have combined plots with horizontal label
