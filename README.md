@@ -7,14 +7,17 @@ This repo contains scripts that will allow you to automatically create plots of 
 ## Usage
 
 
-*Preliminary step: clone the code*
+**Preliminary step: clone the code**
+
 Clone the repository with this command line:
 ```
 git clone https://github.com/MaudGautier/plot-genomic-tracks.git ./
 cd ./plot-genomic-tracks
 ```
 
-*Step 1: Parse input files*
+
+**Step 1: Parse input files**
+
 Parse the input files by preparing a configuration file in a similar fashion to the [``example/config_prep.sh`` file](https://github.com/MaudGautier/plot-genomic-tracks/tree/main/example/config_prep.sh) and executing it using this command line:
 ```
 sh your_config_prep_file.sh
@@ -22,7 +25,8 @@ sh your_config_prep_file.sh
 
 
 
-*Step 2: Plot tracks*
+**Step 2: Plot tracks**
+
 Prepare a configuration file in a similar fashion to the [``example/config_plot.R`` file](https://github.com/MaudGautier/plot-genomic-tracks/tree/main/example/config_plot.R).
 
 Once this is done, you can plot your tracks using the following command line:
@@ -126,7 +130,7 @@ These include:
 	* `'transcripts'` to draw the transcripts
 
 
-*Additional variables for `sashimi` types:*
+**Additional variables for `sashimi` types:**
 
 * `sashimi_plus`: path to the R script file containing the junction reads located on the forward strand
 * `sashimi_minus`: path to the R script file containing the junction reads located on the reverse strand
@@ -134,7 +138,7 @@ These include:
 * `adapted_min_junctions`: a list of minimum number of junctions for certain specific genes (only necessary when different from the `default_min_junctions` value)
 
 
-*Format of input track files*
+**Format of input track files**
 
 There are several types of input files that can be used as tracks. They all must be in one of the following formats:
 
@@ -177,7 +181,8 @@ In addition, a few pieces of information should be indicated:
 
 ## TODO
 
-[] Allow to give BED file rather than GTF file to define regions (step 2 -- R plotting)
-[] Add a test folder with infos from 1 small gene
-[] Add an option for BIGWIG files
-[] Add possibility to have combined plots with horizontal label
+[ ] Allow to give BED file rather than GTF file to define regions (step 2 -- R plotting)
+[ ] Add a test folder with infos from 1 small gene
+[ ] Add an option for BIGWIG files
+[ ] Add possibility to have combined plots with horizontal label
+
