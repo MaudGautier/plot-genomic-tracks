@@ -48,31 +48,30 @@
 
 while [[ $# -gt 1 ]]
 do
-    key="$1"
+	key="$1"
 
-    case $key in
-	-i)
-	  input_gtf="$2"
-	  shift
-	  ;;
-	-o)
-	  output_bed="$2"
-	  shift
-	  ;;
-	-u|--unit)
-	  unit="$2"
-	  shift
-	  ;;
-	-e|--extension)
-	  extension="$2"
-	  shift
-	  ;;
-
-        *)
-            # unknown option
-            ;;
-    esac
-    shift # past argument or value
+	case $key in
+		-i)
+			input_gtf="$2"
+			shift
+			;;
+		-o)
+			output_bed="$2"
+			shift
+			;;
+		-u|--unit)
+			unit="$2"
+			shift
+			;;
+		-e|--extension)
+			extension="$2"
+			shift
+			;;
+		*)
+			# unknown option
+			;;
+	esac
+	shift # past argument or value
 done
 
 echo GENOMIC UNIT    = "${unit}"

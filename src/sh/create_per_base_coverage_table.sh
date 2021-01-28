@@ -57,33 +57,38 @@
 ####                              PARAMETERS                               ####
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
+# Default:
+bigwig="false"
+
 while [[ $# -gt 1 ]]
 do
-    key="$1"
+	key="$1"
 
-    case $key in
-	-i)
-	  input_file="$2"
-	  shift
-	  ;;
-	-o)
-	  output_prefix="$2"
-	  shift
-	  ;;
-	-b|--bed)
-	  bed_regions="$2"
-	  shift
-	  ;;
-	-g|--gs)
-	  genome_sizes="$2"
-	  shift
-	  ;;
-
-        *)
-            # unknown option
-            ;;
-    esac
-    shift # past argument or value
+	case $key in
+		-i)
+			input_file="$2"
+			shift
+			;;
+		-o)
+			output_prefix="$2"
+			shift
+			;;
+		-b|--bed)
+			bed_regions="$2"
+			shift
+			;;
+		-g|--gs)
+			genome_sizes="$2"
+			shift
+			;;
+		--bigwig)
+			bigwig="true"
+			;;
+		*)
+			# unknown option
+			;;
+	esac
+	shift # past argument or value
 done
 
 echo GENOME SIZES    = "${genome_sizes}"
