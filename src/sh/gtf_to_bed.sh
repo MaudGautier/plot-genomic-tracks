@@ -14,8 +14,9 @@
 # Creates BED file from specified lines of a GTF file.
 # The start-stop limits can be extended with parameter `extension`.
 
+
 ## Usage
-# ./src/sh/gtf_to_bed.sh \
+# sh ./src/sh/gtf_to_bed.sh \
 	# -i <INPUT_GTF> \
 	# -o <OUTPUT_BED> \
 	# -e <EXTENSION_IN_BP> \
