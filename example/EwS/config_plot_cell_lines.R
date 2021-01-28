@@ -27,10 +27,10 @@
 
 
 ## General parameters
-output_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/plots/"
+output_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/plots/EwS/"
 main_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/"
-gtf_genes_path <- '/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/1_Data/201201_Ewing_neos_NEW_IDs.gtf'
-tracks_folder <- "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/"
+gtf_genes_path <- '/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/input/EwS/201201_Ewing_neos_NEW_IDs.gtf'
+tracks_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/input/EwS/"
 
 ## Tracks
 tracks_info <- list(
@@ -64,18 +64,18 @@ tracks_info <- list(
                    color = "grey", 
                    height = 0.3, 
                    type = "density"),
-  "Prediction" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/1_Data/201201_Ewing_neos_NEW_IDs.gtf", 
+  "Prediction" = list(path = paste0(tracks_folder, "201201_Ewing_neos_NEW_IDs.gtf"), 
                       group = "neotranscripts", 
                       height = 0.4, 
                       type = "transcripts"),
-  "All genes" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS/gencode.v19.annotation.sorted.gtf_MODIF", 
+  "All genes" = list(path = paste0(tracks_folder, "gencode.v19.annotation.gtf"), 
                       group = "neotranscripts", 
                       height = 0.4, 
                       type = "transcripts"),
-  "Pile-up" = list(path = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/3d_IGV_New_IDs/Against_genes_of_201201_Ewing_neos_NEW_IDs/EW_MERGED.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final", 
+  "Pile-up" = list(path = paste0(tracks_folder, "EW_MERGED.against.201201_Ewing_neos_NEW_IDs.cov_per_base_final"), 
                  group = "pileup", 
-                 sashimi_plus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_PLUS/", 
-                 sashimi_minus = "/Users/maudgautier/Documents/data/tmp_from_calcsub/figs_EwS_100kb/4_junctions/junctions_100kb_Rscript_MINUS/", 
+                 sashimi_plus = paste0(tracks_folder, "junctions_plus/"),
+                 sashimi_minus = paste0(tracks_folder, "junctions_minus/"),
                  color = "grey", 
                  height = 0.6, 
                  type = "sashimi", 
