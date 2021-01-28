@@ -92,6 +92,33 @@ sh ./src/sh/create_per_base_coverage_table.sh \
 
 
 # Step 3: Prepare Rscript junction files for sashimi tracks
+tsv_list_of_bams_MERGED=$SASHIMI/list_bams_MERGED.tsv
+/data/kdi_prod/project_result/726/27.01/results/4_Sashimi/list_bams_MERGED.tsv
+# echo -e "Pile-up\t$DATA/EW_merged.bam" > $tsv_list_of_bams_MERGED
+while read chrom start stop ID ; do
+	echo $ID
+
+	# Get position
+	position=$chrom":"$start"-"$stop
+	
+	# Get junctions on + strand
+	python3 src/sh/get_junctions_Rscript.py \
+		-b ${input_folder}/EW_merged.bam \
+		-c $position \
+		-s MATE1_SENSE \
+		-M 1 \
+		-r $output_folder/junctions_plus/${ID}.R
+
+	# Get junctions on - strand
+	python3 src/sh/get_junctions_Rscript.py \
+		-b ${input_folder}/EW_merged.bam \
+		-c $position \
+		-s MATE2_SENSE \
+		-M 1 \
+		-r $output_folder/junctions_minus/${ID}.R
+
+done < ${output_folder}/genomic_regions.bed
+
 
 
 # Optional: Modify names in gene_id of GTF tracks
