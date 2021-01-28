@@ -18,6 +18,15 @@
 # `--bw|--bigwig` should be turned on. 
 
 
+## Usage
+# sh ./src/sh/create_per_base_coverage_table.sh \
+	# -i <INPUT_BAM_OR_BED> \
+	# --bed <BED_REGIONS> \
+	# --gs <CHROM_SIZES> \
+	# -o <OUTPUT_PREFIX> \
+	# [--bigwig]
+
+
 ## Requirements:
 # - GNU awk
 # - GNU sort
@@ -32,6 +41,7 @@
 # chr3  198022430
 # chr4  191154276
 # chr5  180915260
+
 
 ## Output
 # The output file will contain 4 columns defining the depth (vertical coverage)
