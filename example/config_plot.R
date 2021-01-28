@@ -68,7 +68,7 @@ tracks_info <- list(
 
 
 ## Genomic regions
-genes <- sprintf("Ew_NG%s",c(1:10))
+genes <- c("Ew_NG1", "Ew_NG2", "Ew_NG3", "Ew_NG4", "Ew_NG9")
 default_half_width <- 10000
 half_widths <- list("Ew_NG9" = 50000)
 
