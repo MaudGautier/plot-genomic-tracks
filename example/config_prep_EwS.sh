@@ -72,6 +72,7 @@ sh ./src/sh/gtf_to_bed.sh \
 
 
 # Step 2: Prepare per-base coverage files
+##  2a -- Density tracks
 for name in ${list_files_merged[@]} ${list_files_d0_d7[@]} ${list_files_tum_CL[@]} ; do
 	echo "Processing ${name}..."
 	sh ./src/sh/create_per_base_coverage_table.sh \
@@ -80,4 +81,18 @@ for name in ${list_files_merged[@]} ${list_files_d0_d7[@]} ${list_files_tum_CL[@
 		--gs ${input_folder}/chrom_sizes_in_sorted_order.sizes \
 		-o ${output_folder}/${name}.against.${gtf_name}
 done
+
+##  2b -- GGAA track (from BIGWIG file)  -  *requires `--bigwig` option*
+sh ./src/sh/create_per_base_coverage_table.sh \
+	--bigwig \
+	-i ${input_folder}/hg19_GGAA_TTCC_20151221.bw \
+	--bed ${output_folder}/genomic_regions.bed \
+	--gs ${input_folder}/chrom_sizes_in_sorted_order.sizes \
+	-o ${output_folder}/hg19_GGAA_TTCC_20151221.against.${gtf_name}
+
+
+# Step 3: Prepare Rscript junction files for sashimi tracks
+
+
+# Optional: Modify names in gene_id of GTF tracks
 

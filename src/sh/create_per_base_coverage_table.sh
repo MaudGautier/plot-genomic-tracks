@@ -20,11 +20,11 @@
 
 ## Usage
 # sh ./src/sh/create_per_base_coverage_table.sh \
+	# [--bigwig] \
 	# -i <INPUT_BAM_OR_BED> \
 	# --bed <BED_REGIONS> \
 	# --gs <CHROM_SIZES> \
-	# -o <OUTPUT_PREFIX> \
-	# [--bigwig]
+	# -o <OUTPUT_PREFIX>
 
 
 ## Requirements:
@@ -81,7 +81,7 @@ do
 			genome_sizes="$2"
 			shift
 			;;
-		--bigwig)
+		-bw|--bigwig)
 			bigwig="true"
 			;;
 		*)
@@ -95,6 +95,7 @@ echo GENOME SIZES    = "${genome_sizes}"
 echo INPUT - BAM/BED = "${input_file}"
 echo OUTPUT PREFIX   = "${output_prefix}"
 echo BED REGIONS     = "${bed_regions}"
+echo INPUT IS BIGWIG = "${bigwig}"
 
 
 
@@ -102,9 +103,30 @@ echo BED REGIONS     = "${bed_regions}"
 ####                          CREATE BED FROM GTF                          ####
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
-## Add option bigwig
+# (Optional) If the input file is a bigwig file, tranform it to BED format
+if [ $bigwig = "true" ] ; then
+	# Transform to bedgraph
+	bigWigToBedGraph ${input_file} ${input_file}.bedgraph
 
+	# Transform bedgraph to bed
+	awk '{ \
+			if ($1 ~ /^chr/) { \
+		   print $1"\t"$2"\t"$3"\tid-"NR"\t"$4; \
+			} \
+		}' ${input_file}.bedgraph \
+	> ${input_file}.bed
 
+	# Sort
+	sort -k1,1V -k2,2n ${input_file}.bed > ${input_file}.sorted.bed
+
+	# Remove intermediary files
+	rm -f ${input_file}.bedgraph
+	rm -f ${input_file}.bed
+
+	# Rename input
+	temp_file=${input_file}.sorted.bed
+	input_file=${input_file}.sorted.bed
+fi
 
 
 # Get per-base coverage
@@ -115,20 +137,59 @@ bedtools coverage -sorted -split -d \
 	> ${output_prefix}.cov_per_base
 
 
+# Get final file
+echo -e "#Chromosome\tPosition\tGene_ID\tCoverage" \
+	> ${output_prefix}.cov_per_base_final
 
-## Add option bigwig
-
-
-
-## Get final file
-echo -e "#Chromosome\tPosition\tGene_ID\tCoverage" > ${output_prefix}.cov_per_base_final 
 awk -v OFS="\t" '{
 	print $1, $2 + $5 - 1, $4, $6
    }' ${output_prefix}.cov_per_base \
    >> ${output_prefix}.cov_per_base_final
 
 
+# (Optional) Get height proportional to number of repeats
+if [ $bigwig = "true" ] ; then
+
+	mv ${output_prefix}.cov_per_base_final \
+		${output_prefix}.cov_per_base_no_height
+
+	awk -v OFS="\t" '
+	NR==1 { print }
+	NR > 1 {
+		if ($4==1) { c++ }
+
+		if ($4 == 1 && prev_cov == 0) {
+			chrom = $1
+			start = $2
+			stop = $2
+			ID = $3
+			c = 1
+		}
+
+		if ($4 == 0 && prev_cov == 1 && ID == $3) {
+			stop = prev_pos
+			tot_cov=c/4
+			for (i=start; i<=stop; i++) {
+				print prev_chrom,i,prev_ID,tot_cov
+			}
+		}
+
+		if ($4 == 0) { print }
+
+		prev_chrom=$1
+		prev_pos=$2
+		prev_ID=$3
+		prev_cov=$4
+	}' ${output_prefix}.cov_per_base_no_height \
+	> ${output_prefix}.cov_per_base_final
+
+fi
+
+
 ## Delete intermediary file
 rm -f ${output_prefix}.cov_per_base
-
+if [ bigwig = "true" ] ; then
+	rm -f ${temp_file}
+	rm -f ${output_prefix}.cov_per_base_no_height
+fi
 
