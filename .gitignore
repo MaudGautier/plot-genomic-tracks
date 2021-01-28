@@ -4,5 +4,6 @@
 # MacOS files
 **/.DS_Store
 
-# plots
+# plots and input folders
 **/plots/
+**/input/
