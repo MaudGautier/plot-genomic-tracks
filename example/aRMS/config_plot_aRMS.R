@@ -29,7 +29,7 @@
 ## General parameters
 output_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/plots/aRMS/"
 main_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/"
-gtf_genes_path <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/input/aRMS/200624_DSRCT_neos_NEW_IDs.gtf"
+gtf_genes_path <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/input/aRMS/200624_aRMS_neos_NEW_IDs.gtf"
 tracks_folder <- "/Users/maudgautier/Documents/github-savings/plot-genomic-tracks/input/aRMS/"
 
 ## Tracks
@@ -83,35 +83,31 @@ tracks_info <- list(
 
 
 ## Genomic regions
-genes <- sprintf("Ew_NG%s",c(1:37))
+genes <- sprintf("aRMS_NG%s",c(1:36))
 default_half_width <- 10000
-half_widths <- list("DSRCT_NG2" = 50000,
-					"DSRCT_NG4" = 50000,
-					"DSRCT_NG5" = 50000,
-					"DSRCT_NG7" = 50000,
-					"DSRCT_NG8" = 50000,
-					"DSRCT_NG9" = 50000,
-					"DSRCT_NG10" = 50000,
-					"DSRCT_NG12" = 50000,
-					"DSRCT_NG13" = 50000,
-					"DSRCT_NG14" = 50000,
-					"DSRCT_NG15" = 50000,
-					"DSRCT_NG16" = 50000,
-					"DSRCT_NG18" = 50000,
-					"DSRCT_NG19" = 50000,
-					"DSRCT_NG21" = 50000,
-					"DSRCT_NG22" = 50000,
-					"DSRCT_NG23" = 50000,
-					"DSRCT_NG24" = 50000,
-					"DSRCT_NG25" = 50000,
-					"DSRCT_NG26" = 50000,
-					"DSRCT_NG27" = 50000,
-					"DSRCT_NG28" = 50000,
-					"DSRCT_NG29" = 50000,
-					"DSRCT_NG32" = 50000,
-					"DSRCT_NG33" = 50000,
-					"DSRCT_NG34" = 50000,
-					"DSRCT_NG35" = 50000,
-					"DSRCT_NG36" = 50000,
-					"DSRCT_NG37" = 50000)
+half_widths <- list("aRMS_NG1" = 50000,
+                  "aRMS_NG2" = 50000,
+                  "aRMS_NG4" = 50000,
+                  "aRMS_NG3" = 50000,
+                  "aRMS_NG9" = 50000,
+                  "aRMS_NG10" = 50000,
+                  "aRMS_NG11" = 50000,
+                  "aRMS_NG13" = 50000,
+                  "aRMS_NG14" = 50000,
+                  "aRMS_NG15" = 50000,
+                  "aRMS_NG16" = 50000,
+                  "aRMS_NG19" = 50000,
+                  "aRMS_NG20" = 50000,
+                  "aRMS_NG21" = 50000,
+                  "aRMS_NG22" = 50000,
+                  "aRMS_NG24" = 50000,
+                  "aRMS_NG25" = 50000,
+                  "aRMS_NG27" = 50000,
+                  "aRMS_NG30" = 50000,
+                  "aRMS_NG31" = 50000,
+                  "aRMS_NG32" = 50000,
+                  "aRMS_NG33" = 50000,
+                  "aRMS_NG34" = 50000,
+                  "aRMS_NG35" = 50000,
+				  "aRMS_NG36" = 50000)
 
