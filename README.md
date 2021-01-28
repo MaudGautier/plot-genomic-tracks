@@ -27,12 +27,19 @@ Rscript ./src/R/make_genomic_plot.R your_config_plot.R
 
 ## Requirements
 
-Hereunder is the list of applications that are necessary:
+Hereunder is the list of applications that are necessary and versions I used:
 
-* R >= 4.0.3
+* R, version 4.0.3
+* Python, version 3.7.6
+* GNU bash, version 4.2.46
+* GNU Awk, version 4.0.2
+* GNU sort, 
+* bedtools
+* bigWigToBedGraph
+* groupBy
 
 
-In R, you *must* install the following libraries:
+For the plotting step, in R, you *must* install the following libraries:
 
 * ggplot2
 * ggbio
