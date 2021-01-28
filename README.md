@@ -76,8 +76,24 @@ BiocManager::install("GenomicRanges")
 
 ## TL;DR
 
+### Description
 
-### Plotting tracks
+To plot genomic tracks, two successive steps are required: first, the files containing the tracks to be plotted must be parsed adequately and second, the plots can be generated these parsed files.
+
+
+### Step 1: Parse input files
+
+To parse the input files, you must prepare the configuration file and execute it.
+The configuration file ([see an example here](https://github.com/MaudGautier/plot-genomic-tracks/tree/main/example/config_prep.R)) proceeds as follows:
+
+* If there is no existing BED file defining the span of the regions to plot, a GTF file can be provided and it will be parsed to create a correct BED file with a given extended spanning on both the left and right sides
+* The BAM or BED files corresponding to all tracks to be plotted as density or sashimi tracks are parsed to create a per-base coverage file (containing the sequencing depth at each position between any designed BED region defined precedently)
+* For each BAM file that is to be plotted as a sashimi track, an R script containing the junctions' arcs positions is created
+* Tracks containing repeats (like GGAA repeats) provided in the BIGWIG format are parsed to create a per-base height file (where the height given at each position equals the number of repeats of the 4-sequence motif)
+
+
+
+### Step 2: Plot tracks
 
 To plot the tracks, you must prepare the configuration file.
 The configuration file ([see an example here](https://github.com/MaudGautier/plot-genomic-tracks/tree/main/example/config_plot.R)) must contain at least:
@@ -155,5 +171,5 @@ In addition, a few pieces of information should be indicated:
 
 [] Allow to give BED file rather than GTF file to define regions (step 2 -- R plotting)
 [] Add a test folder with infos from 1 small gene
-
+[] Add an option for BIGWIG files
 
