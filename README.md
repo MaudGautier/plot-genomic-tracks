@@ -140,3 +140,11 @@ In addition, a few pieces of information should be indicated:
 
 
 
+
+
+## TODO
+
+[] Allow to give BED file rather than GTF file to define regions (step 2 -- R plotting)
+[] Add a test folder with infos from 1 small gene
+
+
