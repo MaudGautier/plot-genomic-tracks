@@ -33,7 +33,7 @@ config_file <- args[1]
 if (!exists(deparse(substitute(main_folder)))) {
   main_folder <- getwd()
 }
-source(file.path(main_folder, "/src/R/functions.R"))
+source(file.path(main_folder, "src/R/functions.R"))
 source(config_file)
 
 # Import libraries
