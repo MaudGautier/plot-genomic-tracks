@@ -185,4 +185,5 @@ In addition, a few pieces of information should be indicated:
 - [ ] Add a test folder with infos from 1 small gene
 - [ ] Add an option for BIGWIG files
 - [ ] Add possibility to have combined plots with horizontal label
+- [ ] Add check that all names given to tracks_info are different from one another
 
