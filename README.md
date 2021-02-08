@@ -46,6 +46,7 @@ Hereunder is the list of applications that are necessary and versions I used:
 * GNU bash, version 4.2.46
 * GNU Awk, version 4.0.2
 * GNU sort, version 8.22
+* GNU grep, version 2.20
 * bedtools, version 2.27.1
 * bigWigToBedGraph, ucsc-bigwigtobedgraph version 357
 
