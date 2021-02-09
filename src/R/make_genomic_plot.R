@@ -89,6 +89,10 @@ gtf_genes <- read.table(gtf_genes_path, sep="\t")
 txdb_genes <- GenomicFeatures::makeTxDbFromGFF(file = gtf_genes_path, 
                                                format="gtf")
 
+# Default value for label_size
+if (!exists(deparse(substitute(label_size)))) {
+  label_size <- 1.5
+}
 
 
 
@@ -173,7 +177,7 @@ for (gene in genes) {
       width = 1800, height = 1050)
   print(ggbio::tracks(list_plots,
                       heights = heights,
-                      label.text.cex = 1.5,
+                      label.text.cex = label_size,
                       title = paste0(gene, " (", chromosome, ")"),
                       xlim = c(left, right)
   ) + ylab("") + scale_x_continuous(labels=comma) + 
