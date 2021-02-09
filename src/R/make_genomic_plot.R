@@ -178,9 +178,11 @@ for (gene in genes) {
   print(ggbio::tracks(list_plots,
                       heights = heights,
                       label.text.cex = label_size,
+					  label.text.angle = 0,
+					  label.width = unit(7, "lines"),
                       title = paste0(gene, " (", chromosome, ")"),
                       xlim = c(left, right)
-  ) + ylab("") + scale_x_continuous(labels=comma) + 
+  ) + ylab("") + scale_x_continuous(labels=comma) +
     theme(axis.text.x = element_text(size = 15))) 
    dev.off()
 
